@@ -1,41 +1,63 @@
-"""Streamlit interface for Fashion AI."""
+for outfit in payload["outfits"]:
+    st.subheader(
+        f"Compatibility Score: {outfit['compatibility_score']}/100"
+    )
 
-from __future__ import annotations
+    if outfit.get("generated_image_path"):
+        st.caption("Generated Outfit Board")
+        st.code(outfit["generated_image_path"])
 
-import os
-from pathlib import Path
+        safe_image(
+            outfit["generated_image_path"],
+            "Generated outfit board from dataset images",
+        )
 
-import requests
-import streamlit as st
-from requests import RequestException
+    for reason in outfit["reasoning"]:
+        st.write(reason)
 
+    cols = st.columns(4)
 
-API_URL = os.getenv("FASHION_AI_API_URL", "http://127.0.0.1:8000")
+    for index, slot in enumerate(["topwear", "bottomwear", "footwear"]):
+        item = outfit.get(slot)
 
+        with cols[index]:
+            st.caption(slot.upper())
 
-def safe_image(path: str | None, caption: str | None = None) -> None:
-    """Render local files or remote URLs."""
+            if item:
+                if item.get("image_path"):
+                    safe_image(item["image_path"])
 
-    if not path:
-        return
+                st.metric(
+                    item["name"],
+                    f"{item['score']}/100"
+                )
 
-    try:
-        # Remote URL
-        if path.startswith("http://") or path.startswith("https://"):
-            st.image(path, caption=caption, use_container_width=True)
-            return
+                shown_ids.append(item["id"])
 
-        # Local file
-        image_path = Path(path)
+                st.write(
+                    f"{item['color']} "
+                    f"{item['article_type']} | "
+                    f"{item['usage']} | "
+                    f"{item['season']}"
+                )
 
-        if image_path.exists():
-            st.image(
-                str(image_path),
-                caption=caption,
-                use_container_width=True,
+                st.progress(
+                    min(item["score"] / 100, 1.0)
+                )
+
+    with cols[3]:
+        st.caption("ACCESSORY")
+
+        for item in outfit.get("accessories", []):
+            if item.get("image_path"):
+                safe_image(item["image_path"])
+
+            st.metric(
+                item["name"],
+                f"{item['score']}/100"
             )
-        else:
-            st.warning(f"Image file missing: {image_path.name}")
 
-    except Exception as exc:
-        st.warning(f"Could not render image: {exc}")
+            shown_ids.append(item["id"])
+
+    with st.expander("Score breakdown"):
+        st.json(outfit)
