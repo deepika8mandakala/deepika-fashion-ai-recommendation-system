@@ -40,11 +40,6 @@ def safe_image(path: str | None, caption: str | None = None) -> None:
 
 st.set_page_config(page_title="Fashion AI", page_icon="shirt", layout="wide")
 st.title("Fashion AI Outfit Recommender")
-st.image(
-    "https://deepika-fashion-ai-recommendation-system-mvcz.onrender.com/images/myntra/28569210.jpg",
-    caption="Test Image",
-    use_container_width=True,
-)
 st.caption(f"API: {API_URL}")
 
 with st.sidebar:
