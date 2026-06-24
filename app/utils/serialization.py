@@ -12,26 +12,31 @@ from app.schemas.recommendation import (
 BASE_URL = "https://deepika-fashion-ai-recommendation-system-mvcz.onrender.com"
 
 
-def to_public_image_url(local_path: str | None) -> str | None:
+def to_public_image_url(path: str | None) -> str | None:
     """
-    Convert local filesystem paths into public URLs
-    that FastAPI serves through StaticFiles.
+    Convert local filesystem paths into publicly accessible URLs.
     """
 
-    if not local_path:
+    if not path:
         return None
 
-    normalized = local_path.replace("\\", "/")
+    # Already a URL
+    if path.startswith("http://") or path.startswith("https://"):
+        return path
 
+    normalized = str(path).replace("\\", "/")
+
+    # Product images
     if "images/" in normalized:
         relative = normalized.split("images/", 1)[1]
         return f"{BASE_URL}/images/{relative}"
 
+    # Generated outfit boards
     if "generated_outfits/" in normalized:
         filename = Path(normalized).name
         return f"{BASE_URL}/generated/{filename}"
 
-    return local_path
+    return normalized
 
 
 def ranked_product_to_response(
@@ -63,7 +68,9 @@ def ranked_product_to_response(
     )
 
 
-def outfit_to_response(outfit: Outfit) -> OutfitResponse:
+def outfit_to_response(
+    outfit: Outfit,
+) -> OutfitResponse:
     """
     Serialize outfit domain object.
     """
@@ -78,7 +85,7 @@ def outfit_to_response(outfit: Outfit) -> OutfitResponse:
                 ranked_product_to_response(accessory)
                 for accessory in outfit.accessories
             )
-            if item
+            if item is not None
         ],
         compatibility_score=outfit.compatibility_score,
         reasoning=outfit.reasoning,
