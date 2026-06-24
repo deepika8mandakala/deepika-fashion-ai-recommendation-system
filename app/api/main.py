@@ -30,28 +30,31 @@ app = FastAPI(
     version="1.0.0",
 )
 
+from pathlib import Path
 
 # --------------------------------------------------
-# Static Files
+# Static File Configuration
 # --------------------------------------------------
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+
+IMAGES_DIR = BASE_DIR / "data" / "darex" / "images"
+GENERATED_DIR = BASE_DIR / "cache" / "generated_outfits"
+
+print("IMAGES_DIR =", IMAGES_DIR)
+print("GENERATED_DIR =", GENERATED_DIR)
 
 app.mount(
     "/images",
-    StaticFiles(directory="data/darex/images"),
+    StaticFiles(directory=str(IMAGES_DIR)),
     name="images",
 )
 
 app.mount(
     "/generated",
-    StaticFiles(directory="cache/generated_outfits"),
+    StaticFiles(directory=str(GENERATED_DIR)),
     name="generated",
 )
-
-
-# --------------------------------------------------
-# Dependency Factories
-# --------------------------------------------------
-
 @lru_cache
 def get_recommender() -> RecommendationService:
     return RecommendationService()
