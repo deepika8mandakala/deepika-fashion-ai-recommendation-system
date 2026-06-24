@@ -140,115 +140,47 @@ combined into a single recommendation image.
 
 ---
 
-# Dataset
+## Dataset
 
-Dataset Provided By Dare XAI:
+This project is built using the **Dare XAI Fashion Recommendation Dataset**.
 
-```text
-products.csv
-outfits.csv
-images/
+🔗 Dataset Repository:  
+https://github.com/DarexAI-AI-Startup/ML-TASK.git
+
+### Files Used
+
+| File | Purpose |
+|--------|---------|
+| products.csv | Product metadata and catalog information |
+| outfits.csv | Curated outfit combinations and stylist rationales |
+| Product Images | Visual fashion item representations |
+| curated25.xlsx | Additional curated fashion dataset |
+
+### Data Sources
+
+The dataset contains fashion products collected from:
+
+- Ajio
+- Myntra
+- Nykaa
+
+### Usage in This Project
+
+- Metadata Embeddings
+- Image Embeddings
+- Hybrid Retrieval
+- Outfit Compatibility Learning
+- Personalized Recommendations
+- Outfit Board Generation
+- Explainable Fashion Recommendations
+
+```bash
+git clone https://github.com/DarexAI-AI-Startup/ML-TASK.git
 ```
-
----
-
-## products.csv
-
-Contains:
-
-* Product ID
-* Product Name
-* Brand
-* Gender
-* Occasion
-* Category
-* Description
-* Product Images
-
-Example:
-
-```text
-Arrow Formal Shirt
-Category: Formal Shirt
-Occasion: Office
-Gender: Men
-```
-
----
-
-## outfits.csv
-
-Contains stylist-curated outfit combinations.
-
-Example:
-
-```text
-Formal Shirt
-Formal Trouser
-Blazer
-Formal Shoes
-```
-
-These combinations are used as compatibility ground truth.
-
----
-
-## Images
-
-Product images from:
-
-* Ajio
-* Myntra
-* Nykaa
-
-Used for:
-
-* Image embeddings
-* Visual recommendations
-* Outfit board generation
-
----
 
 # System Architecture
 
-```mermaid
-flowchart TD
-
-A[User Query]
-
---> B[Streamlit Frontend]
-
-B --> C[FastAPI Backend]
-
-C --> D[Intent Extraction]
-
-D --> E[Structured User Profile]
-
-E --> F[Recommendation Engine]
-
-F --> G[Metadata Embeddings]
-
-F --> H[Image Embeddings]
-
-G --> I[Hybrid Embeddings]
-
-H --> I
-
-I --> J[FAISS Retrieval]
-
-J --> K[Compatibility Engine]
-
-K --> L[Ranking Engine]
-
-L --> M[Outfit Board Generator]
-
-M --> N[Explanation Generator]
-
-N --> O[Recommendation Response]
-```
-
----
-
+![Architecture Diagram](docs/architecture.png)
 # Recommendation Pipeline
 
 ## Step 1
@@ -645,9 +577,9 @@ B.Tech Artificial Intelligence & Data Science
 
 Vignan's Institute of Information Technology
 
-GitHub: [Your GitHub]
+GitHub: [https://github.com/deepika8mandakala]
 
-LinkedIn: [Your LinkedIn]
+LinkedIn: [https://www.linkedin.com/in/deepika-mandakala-194880285]
 
 ```
 ```
