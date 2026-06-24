@@ -18,6 +18,10 @@ from app.schemas.recommendation import (
 from app.services.recommender import RecommendationService
 
 
+# --------------------------------------------------
+# App Initialization
+# --------------------------------------------------
+
 configure_logging()
 settings = get_settings()
 
@@ -26,9 +30,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# ---------------------------
-# Static file mounts
-# ---------------------------
+
+# --------------------------------------------------
+# Static Files
+# --------------------------------------------------
 
 app.mount(
     "/images",
@@ -43,6 +48,10 @@ app.mount(
 )
 
 
+# --------------------------------------------------
+# Dependency Factories
+# --------------------------------------------------
+
 @lru_cache
 def get_recommender() -> RecommendationService:
     return RecommendationService()
@@ -53,6 +62,10 @@ def get_intent_parser() -> GeminiIntentParser:
     return GeminiIntentParser()
 
 
+# --------------------------------------------------
+# Root Endpoint
+# --------------------------------------------------
+
 @app.get("/")
 def root() -> dict[str, object]:
     return {
@@ -60,10 +73,20 @@ def root() -> dict[str, object]:
         "status": "ok",
         "docs": "/docs",
         "health": "/health",
-        "chat": {"method": "POST", "path": "/chat"},
-        "recommend": {"method": "POST", "path": "/recommend"},
+        "chat": {
+            "method": "POST",
+            "path": "/chat",
+        },
+        "recommend": {
+            "method": "POST",
+            "path": "/recommend",
+        },
     }
 
+
+# --------------------------------------------------
+# Health Check
+# --------------------------------------------------
 
 @app.get("/health")
 def health() -> dict[str, str]:
@@ -73,8 +96,18 @@ def health() -> dict[str, str]:
     }
 
 
-@app.post("/recommend", response_model=RecommendationResponse)
-def recommend(request: RecommendRequest) -> RecommendationResponse:
+# --------------------------------------------------
+# Recommendation Endpoint
+# --------------------------------------------------
+
+@app.post(
+    "/recommend",
+    response_model=RecommendationResponse,
+)
+def recommend(
+    request: RecommendRequest,
+) -> RecommendationResponse:
+
     if request.intent is None and not request.query:
         raise HTTPException(
             status_code=422,
@@ -94,8 +127,18 @@ def recommend(request: RecommendRequest) -> RecommendationResponse:
     )
 
 
-@app.post("/chat", response_model=RecommendationResponse)
-def chat(request: ChatRequest) -> RecommendationResponse:
+# --------------------------------------------------
+# Conversational Endpoint
+# --------------------------------------------------
+
+@app.post(
+    "/chat",
+    response_model=RecommendationResponse,
+)
+def chat(
+    request: ChatRequest,
+) -> RecommendationResponse:
+
     intent = get_intent_parser().parse(
         request.message,
         request.profile,
@@ -104,18 +147,30 @@ def chat(request: ChatRequest) -> RecommendationResponse:
     return get_recommender().recommend(intent)
 
 
+# --------------------------------------------------
+# Profile Endpoint
+# --------------------------------------------------
+
 @app.post("/profile")
-def profile(intent: UserIntent) -> dict[str, object]:
+def profile(
+    intent: UserIntent,
+) -> dict[str, object]:
+
     return {
         "status": "accepted",
         "profile": intent.model_dump(),
     }
 
 
+# --------------------------------------------------
+# Similar Item Endpoint
+# --------------------------------------------------
+
 @app.post("/similar-item")
 def similar_item(
     request: SimilarItemRequest,
 ) -> dict[str, object]:
+
     try:
         products = get_recommender().similar_items(
             request.item_id,
@@ -143,8 +198,13 @@ def similar_item(
     }
 
 
+# --------------------------------------------------
+# Metrics Endpoint
+# --------------------------------------------------
+
 @app.get("/metrics")
 def metrics() -> dict[str, object]:
+
     recommender = get_recommender()
 
     return {
@@ -154,8 +214,7 @@ def metrics() -> dict[str, object]:
         ),
         "index": (
             "faiss"
-            if recommender.vector_store._faiss_index
-            is not None
+            if recommender.vector_store._faiss_index is not None
             else "numpy"
         ),
     }
