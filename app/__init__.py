@@ -1,0 +1,2 @@
+"""Fashion AI recommendation package."""
+

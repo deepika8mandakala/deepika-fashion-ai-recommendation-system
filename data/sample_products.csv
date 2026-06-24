@@ -1,0 +1,16 @@
+id,gender,masterCategory,subCategory,articleType,baseColour,season,usage,productDisplayName
+1001,male,apparel,topwear,shirt,white,summer,formal,White Formal Cotton Shirt
+1002,male,apparel,bottomwear,chinos,navy,summer,formal,Navy Slim Fit Chinos
+1003,male,footwear,shoes,loafer,brown,summer,formal,Brown Leather Loafers
+1004,female,apparel,topwear,blazer,black,winter,formal,Black Structured Blazer
+1005,female,apparel,bottomwear,trousers,grey,winter,formal,Grey Tailored Trousers
+1006,female,footwear,shoes,heels,black,all season,formal,Black Block Heels
+1007,unisex,apparel,topwear,t-shirt,black,summer,streetwear,Black Oversized Tee
+1008,unisex,apparel,bottomwear,cargo,grey,summer,streetwear,Grey Utility Cargo Pants
+1009,unisex,footwear,shoes,sneakers,white,all season,casual,White Minimal Sneakers
+1010,female,apparel,topwear,kurta,red,all season,ethnic,Red Embroidered Kurta
+1011,female,apparel,bottomwear,skirt,beige,all season,ethnic,Beige Festive Skirt
+1012,male,apparel,topwear,linen shirt,blue,summer,beach,Blue Linen Vacation Shirt
+1013,male,apparel,bottomwear,shorts,beige,summer,beach,Beige Cotton Shorts
+1014,unisex,footwear,sandals,sandals,brown,summer,beach,Brown Beach Sandals
+1015,unisex,accessories,bags,watch,black,all season,formal,Black Minimal Watch
