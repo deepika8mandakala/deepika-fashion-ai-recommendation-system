@@ -14,18 +14,29 @@ API_URL = os.getenv("FASHION_AI_API_URL", "http://127.0.0.1:8000")
 
 
 def safe_image(path: str | None, caption: str | None = None) -> None:
-    """Render local images without crashing the recommendation page."""
+    """Render local files or remote URLs."""
 
     if not path:
         return
-    image_path = Path(path)
-    if not image_path.exists():
-        st.warning(f"Image file missing: {image_path.name}")
-        return
+
     try:
-        st.image(str(image_path), caption=caption, use_container_width=True)
-    except Exception:
-        st.warning(f"Could not render image: {image_path.name}")
+        if path.startswith("http://") or path.startswith("https://"):
+            st.image(path, caption=caption, use_container_width=True)
+            return
+
+        image_path = Path(path)
+
+        if image_path.exists():
+            st.image(
+                str(image_path),
+                caption=caption,
+                use_container_width=True,
+            )
+        else:
+            st.warning(f"Image file missing: {path}")
+
+    except Exception as exc:
+        st.warning(f"Could not render image: {exc}")
 
 st.set_page_config(page_title="Fashion AI", page_icon="shirt", layout="wide")
 st.title("Fashion AI Outfit Recommender")
