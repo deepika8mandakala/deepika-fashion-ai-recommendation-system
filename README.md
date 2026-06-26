@@ -180,7 +180,7 @@ git clone https://github.com/DarexAI-AI-Startup/ML-TASK.git
 
 # System Architecture
 
-![Architecture Diagram](docs/architecture.png)
+![Architecture Diagram](architecture.png)
 # Recommendation Pipeline
 
 ## Step 1
